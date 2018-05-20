@@ -1,0 +1,6 @@
+
+@import './style/weui.wxss';
+
+page{
+	height: 100%;
+}

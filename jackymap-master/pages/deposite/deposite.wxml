@@ -1,0 +1,30 @@
+<!--pages/deposite/deposite.wxml-->
+<view class="page">
+    <view class="page__bd">
+        <view class="state">
+          <view class="flag"> 手机绑定</view>
+          <view class="flag"> 押金充值</view>
+          <view class="flag"> 实名认证</view>
+          <view class="flag"> 开始用车</view>
+        </view>
+    </view>
+
+        <view class="pledgecont">
+           <view class='classname'>
+                <image src='/images/shield.png'></image>
+                  <text>押金（可退）</text>
+                  <text class='pull-right'>￥199</text>
+           </view>
+
+           <view class='small'>押金随心退，安全速到账</view>
+        </view>
+    
+    <view class='message'>
+       <text>全国百万单车任你骑</text>
+    </view>
+
+    <view class='czbtn'>
+       <button type='primary' bindtap='deposite'>去充值</button>
+    </view>
+        </view>
+
