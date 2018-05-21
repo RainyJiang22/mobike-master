@@ -44,6 +44,8 @@ Page({
                longitude :longitude,
                latitude :latitude
            })
+           //查找单车
+          findBikes(longitude,latitude,that)
        },
         
      })
@@ -146,7 +148,7 @@ Page({
   cotroltap :function(res){
     var that = this;
     var cid = res.controlId;
-    // console.log(cid);
+  //  console.log(cid);
     switch(cid){
       //点击扫码按钮
       case 1:{
@@ -206,24 +208,32 @@ Page({
           wx.request({
             url: 'http://localhost:9000/bike/add',
             data: {
-              longitude: log,
-              latitude: lat,
-              bikeNo:10010,
+              // "longitude": log,
+              // "latitude": lat,
+              // bikeNo:10010,
+              location:[log,lat],
               status: 0
             },
             method: 'POST',
             success:function(res){
+              //查找单车,然后把单车显示到对应的页面
                console.log(res)
+              findBikes(log,lat,that);  
             }
           })
           }
         })
-        
-      
-      
        break;
+      }
 
+      //报修单车
+      case 6:{
+        //点击跳转到报修页面
+         wx.navigateTo({
+           url: '../warn/warn',
+         })
 
+        break;
       }    
     }
   },
@@ -232,24 +242,20 @@ Page({
  * 移动后地图位置发生变化
  */
   regionchange:function(e){
-    // var that = this;
-    // // console.log(e)
-    // var etype = e.type;
-    // if(etype == 'end'){
-    //   // console.log(e)
-    //   //添加单车，根据经纬度添加单车
-    //   this.mapCtx.getCenterLocation({
-    //     success: function (res) {
-    //       // console.log(res.longitude)
-    //       // console.log(res.latitude)
-    //       that.setData({
-    //         //重新给经纬度赋值
-    //         log:res.longitude,
-    //         lat:res.latitude
-    //       })
-    //     }
-    //   })
-    // }
+    var that = this;
+    // console.log(e)
+    var etype = e.type;
+    if(etype == 'end'){
+      // console.log(e)
+      //添加单车，根据经纬度添加单车
+      this.mapCtx.getCenterLocation({
+        success: function (res) {
+            var log = res.longitude;
+            var lat =  res.latitude;
+            findBikes(log,lat,that);
+        }
+      })
+    }
   },
 
 
@@ -305,3 +311,44 @@ Page({
   
   }
 })
+
+
+function findBikes(longitude,latitude,that){
+  wx.request({
+      url:"http://localhost:9000/bike/findnear",
+      method:'GET',
+      data:{
+        longitude:longitude,
+        latitude:latitude
+      },
+      success:function(res){
+    //打印下返回结果
+    //这里的数组是返回一个array对象
+      // console.log(res);
+
+        var bikes  = res.data.map((geoResult)  => {
+             
+            return {
+                longitude:geoResult.content.location[0],
+                latitude: geoResult.content.location[1],
+                id: geoResult.content.id,
+                iconPath:"/images/bike.png",
+                width:35,
+                height:40
+            }         
+        })
+
+        //将bike的数组set到当前页面中的markers中
+             that.setData({
+                markers:bikes 
+             })
+
+        
+
+          
+
+      }
+
+
+  })
+ }

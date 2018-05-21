@@ -4,6 +4,7 @@
     "pages/register/register",
     "pages/deposite/deposite",
     "pages/indentify/indentify",
+    "pages/warn/warn",
     "pages/login/login"
   ],
   "window": {

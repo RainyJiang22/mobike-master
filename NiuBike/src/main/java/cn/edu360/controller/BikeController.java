@@ -1,6 +1,9 @@
 package cn.edu360.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.GeoResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +41,21 @@ public class BikeController {
 	  //调用service,将数据保存到mongodb中
 	 bikeService.save(bike);
 	  
-	 
-   return "success";	
+      return "success";	
   }
+  
+  
+  
+  
+  //通过ajex请求
+  @RequestMapping("/bike/findnear")	
+  @ResponseBody
+	public List<GeoResult<Bike>> findnear(double longitude,double latitude) {
+	   
+//	  System.out.println(bike);
+	  //调用service,将数据保存到mongodb中
+	List<GeoResult<Bike>> bikes  =  bikeService.findnear(longitude,latitude);
+	 return bikes;	
+  }
+  
 }
