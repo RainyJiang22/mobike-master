@@ -29,16 +29,14 @@ https://redis.io/download 但是redis不提供window用户进行安装
 
 ### GeoHash的使用
 
-首先，GeoHash用一个字符串表示经度和纬度两个坐标。某些情况下无法在两列上同时应用索引（例如MySQL 4之前的版本，Google App Engine的数据层等），利用GeoHash。只需要在一列上应用索引即可。
+ - 首先，GeoHash用一个字符串表示经度和纬度两个坐标。某些情况下无法在两列上同时应用索引（例如MySQL 4之前的版本，Google App Engine的数据层等），利用GeoHash。只需要在一列上应用索引即可。
+ - 其次，GeoHash表示的并不是一个点，而是一个矩形区域。比如编码wx4g0ec19，它表示的是一个矩形区域。使用者可以发布地址编码，既能表明自己位于北海公园附近，又不至于暴露自己的精确坐标，有助于隐私保护。
+ - 第三，编码的前缀可以表示更大的区域。例如，wx4g0ec1，它的前缀wx4g0e表示包含编码wx4g0ec1在内的更大范围。这个特性可以用于附近地点搜索。首先根据用户当前坐标计算GeoHash（例如wx4g0ec1），然后取其前缀进行查询（SELECT * FROM place WHERE geohash LIKE 'wx4g0e%'），即可查询附近的所有地点。
 
-其次，GeoHash表示的并不是一个点，而是一个矩形区域。比如编码wx4g0ec19，它表示的是一个矩形区域。使用者可以发布地址编码，既能表明自己位于北海公园附近，又不至于暴露自己的精确坐标，有助于隐私保护。
-
-第三，编码的前缀可以表示更大的区域。例如，wx4g0ec1，它的前缀wx4g0e表示包含编码wx4g0ec1在内的更大范围。这个特性可以用于附近地点搜索。首先根据用户当前坐标计算GeoHash（例如wx4g0ec1），然后取其前缀进行查询（SELECT * FROM place WHERE geohash LIKE 'wx4g0e%'），即可查询附近的所有地点。
-
-#### GeoHash比直接用经纬度的高效很多。、
+#### GeoHash比直接用经纬度的高效很多
 具体了解请看一些博文，如下：
-https://blog.csdn.net/universe_ant/article/details/74785989
-https://www.cnblogs.com/aiweixiao/p/6188081.html
+ - https://blog.csdn.net/universe_ant/article/details/74785989
+ - https://www.cnblogs.com/aiweixiao/p/6188081.html
 
 
 ### 结束语
